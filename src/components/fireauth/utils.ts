@@ -1,5 +1,5 @@
 import { app } from "@/services/firebase";
-import { getAuth, signInWithRedirect, getRedirectResult, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
 
 app // here to just let the firebase initialize first
 
@@ -24,5 +24,3 @@ export const getUser = () => {
   const user = localStorage.getItem('user');
   return user ? JSON.parse(user) : undefined;
 };
-
-export { getRedirectResult };

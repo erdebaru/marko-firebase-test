@@ -4,11 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
+    "@marko/run-adapter-netlify": "^0.1.4",
     "firebase": "^9.23.0"
   },
   "devDependencies": {
     "@marko-tags/context": "^2.2.2",
     "@marko/run": "^0.1.16",
+    "compression": "^1.7.4",
     "marko": "^5.28.2",
     "vite": "^4.3.9",
     "vite-plugin-full-reload": "^1.0.5"

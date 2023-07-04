@@ -2,3 +2,5 @@ node_modules
 dist
 .marko-run
 *.log
+netlify
+.netlify
