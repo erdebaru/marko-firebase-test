@@ -1,0 +1,62 @@
+export interface Input{
+  renderBody: Marko.Body;
+}
+$ const { renderBody } = input;
+<fireauth|user, signIn, signOut|>
+  <div class="layout">
+    <nav>
+      <a class="logo" href="/">
+        SOME LOGO HERE
+      </a>
+      <@item href="/">Home</>
+      <@item href="/articles">Articles</>
+      <@item href="/src">Source</>
+      // Seems like event handlers cannot be attached to named attribute tags
+      <a class="signin" href="javascript:void(0);" onClick(user ? signOut : signIn)>
+        ${user ? 'Sign Out' : 'Sign In'}
+      </a>
+    </nav>
+    <main>
+      <${renderBody}/>
+    </main>
+  </div>
+</fireauth>
+style {
+  .layout {
+    color: #333;
+    display: grid;
+    min-height: 100vh;
+    grid-template: "nav main" 1fr / 200px 1fr;
+  }
+  main {
+    grid-area: main;
+    padding: 1rem;
+    background-color: #eee;
+  }
+  .logo {
+    display:block;
+    text-decoration: none;
+    padding: 24px 8px;
+    letter-spacing: -1pt;
+    color:aquamarine;
+    text-align: center;
+  }
+  .logo:hover {
+    background-color: #222; 
+  }
+
+  .signin {
+    display: block; 
+    padding: 18px 6px; 
+    text-align: center; 
+    text-decoration: none; 
+    position: absolute; 
+    bottom:0;
+    left: 0;
+    width: 200px;
+  }
+  .signin:hover {
+    background-color: #222; 
+    color: aquamarine;
+  }
+}

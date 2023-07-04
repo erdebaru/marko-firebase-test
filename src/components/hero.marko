@@ -1,0 +1,26 @@
+export interface Input {
+  renderBody: Marko.Body;
+}
+
+<div class="hero">
+  <div class="hero-content">
+    <${input.renderBody}/>
+  </div>
+</div>
+
+style {
+  .hero {
+    min-height: 512px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+  .hero-content {
+    max-width: 800px;
+    padding: 0 16px;
+    width: 100%;
+    font-size: 48px;
+  }
+}

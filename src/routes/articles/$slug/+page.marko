@@ -1,0 +1,13 @@
+$ const { slug } = $global.params;
+<layout>
+  <articles|[article]| slug=slug>
+    <if(article)>
+      <h1>
+        ${article.title}
+      </h1>
+      <p>
+        ${article.body}
+      </p>  
+    </if>
+  </articles>
+</layout>

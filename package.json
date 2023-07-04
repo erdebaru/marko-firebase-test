@@ -4,10 +4,14 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "marko": "^5.25.16"
+    "firebase": "^9.23.0"
   },
   "devDependencies": {
-    "@marko/run": "^0.1.14"
+    "@marko-tags/context": "^2.2.2",
+    "@marko/run": "^0.1.16",
+    "marko": "^5.28.2",
+    "vite": "^4.3.9",
+    "vite-plugin-full-reload": "^1.0.5"
   },
   "private": true,
   "scripts": {

@@ -1,0 +1,26 @@
+<layout>
+  <articles|items|>
+    <div class="articles">
+      <for|item| of=items>
+        <div class="article-item">
+          <h4><a href=`/articles/${item.slug}`>${item.title}</a></h4>
+          <p>${item.body}</p>
+          <p class="mt-1">
+            <small><a href=`/articles/${item.slug}`>Read more</a></small>
+          </p>
+        </div>
+      </for>  
+    </div>
+  </articles>
+</layout>
+
+
+style {
+  .articles { }
+  .articles > .article-item {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+}

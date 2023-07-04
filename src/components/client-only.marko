@@ -1,0 +1,19 @@
+static var isBrowser = typeof window !== "undefined";
+
+export interface Input {
+  renderBody: Marko.Body;
+}
+
+$ const { renderBody } = input;
+
+class {
+  onMount(){
+    // This forces the component to re-render on client
+    // Without this force update the component will not re-render
+    this.forceUpdate(); 
+  }
+}
+
+<if(isBrowser)>
+  <${renderBody}/>
+</if>

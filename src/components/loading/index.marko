@@ -1,0 +1,31 @@
+//@ts-ignore
+import progressIcon from './progress.svg?raw';
+
+<div class="loading">
+  <i class="loading-icon">
+    $!{progressIcon} //Hope this is the right way to do it, Kind of dangerous
+  </i>
+</div>
+
+style {
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  i.loading-icon {
+    width: 48px;
+    height: 48px;
+    display: block;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      rotate: 0deg;
+    }
+    100% {
+      rotate: 360deg;
+    }
+  }
+}

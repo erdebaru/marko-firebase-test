@@ -1,0 +1,9 @@
+import type { User } from 'firebase/auth';
+
+export interface Input {
+  renderBody: Marko.Body<[User]>;
+}
+
+<context|{ user }: { user: User }| from="fireauth">
+  <${input.renderBody}(user)/>
+</context>

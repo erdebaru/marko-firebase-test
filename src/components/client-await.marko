@@ -1,0 +1,99 @@
+//@ts-nocheck
+//It is the hack from https://gist.github.com/DylanPiercey/9d65759ffa4ff7752a2bc8aa74f5da40
+
+export interface Input<T> {
+    from: any;
+    then: Marko.AttrTag<[T]>;
+    catch: Marko.AttrTag<[Error]>;
+    placeholder: Marko.AttrTag<[]>;
+}
+
+static var isBrowser = typeof window !== "undefined";
+
+static var LOADING = 0;
+
+static var RESOLVED = 1;
+
+static var REJECTED = 2;
+
+static function isPromise(val) {
+    return val && val.then;
+}
+
+static function syncSSRPromise(state, value) {
+    if (value && "_settled" in value) {
+        if (value._settled === 0) {
+            throw new Error("Was unable to serialize promise data from server");
+        }
+        state.settled = value._settled;
+        state.value = value._value;
+        return true;
+    }
+}
+
+class {
+    onCreate(input) {
+        var value = input.from;
+        if (isBrowser) {
+            var state = { settled: LOADING, value: undefined };
+            syncSSRPromise(state, value);
+            this.state = state;
+        } else if (isPromise(value)) {
+            var resolvedData = { _settled: LOADING, _value: undefined };
+            value.toJSON = function() {
+                return resolvedData;
+            };
+            value.then(
+                function(value) {
+                    resolvedData._settled = RESOLVED;
+                    resolvedData._value = value;
+                },
+                function(err) {
+                    resolvedData._settled = REJECTED;
+                    resolvedData._value = err;
+                }
+            );
+        }
+    }
+    onInput(input) {
+        if (isBrowser && this.hasMounted) {
+            var state = this.state;
+            var value = input.from;
+            if (!syncSSRPromise(state, value)) {
+                if (isPromise(value)) {
+                    state.settled = LOADING;
+                    value.then(
+                        function(value) {
+                            state.settled = RESOLVED;
+                            state.value = value;
+                        },
+                        function(err) {
+                            state.settled = REJECTED;
+                            state.value = value;
+                        }
+                    );
+                } else {
+                    state.settled = RESOLVED;
+                    state.value = value;
+                }
+            }
+        }
+    }
+    onMount() {
+        this.hasMounted = true;
+    }
+}
+
+<if(isBrowser)>
+    $ var renderer = (
+        state.settled === RESOLVED
+            ? input.then
+            : state.settled === REJECTED
+            ? input.catch
+            : input.placeholder
+    );
+    $ renderer && renderer.renderBody && renderer.renderBody((out), state.value);
+</if>
+<else>
+    <await(input.from) then=input.then catch=input.catch timeout=input.timeout/>
+</else>

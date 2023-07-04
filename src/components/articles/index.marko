@@ -1,0 +1,27 @@
+import type { Article } from "./types";
+
+export interface Input {
+  slug?: string;
+  renderBody: Marko.Body<[Article[]]>;
+}
+$ const { slug, renderBody } = input;
+$ const conditions = [];
+$ {
+  if(slug){
+    conditions.push({
+      field: 'slug',
+      operator: '==',
+      value: slug
+    })
+  }
+}
+
+<firestore<Article> collection='articles' where=conditions>
+  <@placeholder><loading/></>
+  <@then|articles: Article[]|>
+    <${renderBody}(articles)/>
+  </>
+  <@catch|error|>
+    <pre>${error}</pre>
+  </>
+</firestore>

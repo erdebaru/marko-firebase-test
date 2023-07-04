@@ -1,0 +1,28 @@
+import { auth, signIn, signOut, storeUser, getUser } from './utils';
+import type { User } from "firebase/auth";
+
+export interface Input {
+  renderBody: Marko.Body<[(User | null), () => void, () => void]>;
+}
+
+class {
+  declare state: {
+    user: User | null;
+  }
+  onCreate(){
+    this.state = {
+      user: getUser(),
+    };
+  }
+  onMount(){
+    auth.onAuthStateChanged((result) => {
+      this.state.user = result;
+      storeUser(result); //store user in local storage just so we can show user while waiting for onAuthStateChanged.
+    });
+  }
+}
+<context user=state.user>
+  <${input.renderBody}(state.user, signIn, signOut)/>
+</context>
+
+

@@ -1,0 +1,37 @@
+<layout>
+  <current-user|user|>
+    <hero>
+      <if(user)>
+        Hello, ${user?.displayName}!
+        <p style="font-size: 1.2rem">Thanks for signing in!</p>
+      </if>
+      <else>
+        Try signing in with Google by clicking "Sign In".
+      </else>
+    </hero>
+  </current-user>
+  <h2 class="mt-1 mb-1">Articles</h2>
+  <articles|items|>
+    <div class="home-articles">
+      <for|item| of=items>
+        <div class="article-item">
+          <h4><a href=`/articles/${item.slug}`>${item.title}</a></h4>
+          <p>${item.body}</p>
+        </div>
+      </for>  
+    </div>
+  </articles>
+</layout>
+
+style {
+  .home-articles  {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .home-articles > .article-item {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+  }
+}

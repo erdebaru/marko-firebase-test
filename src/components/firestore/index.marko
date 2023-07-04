@@ -1,0 +1,56 @@
+import { db } from './utils';
+import { 
+  getDocs,
+  collection as fireCollection, 
+  query as fireQuery, 
+  where as fireWhere, 
+  orderBy as fireOrderBy,
+  limit as fireLimit,
+  startAt as fireStartAt,
+} from 'firebase/firestore/lite';
+
+import type { QuerySnapshot, DocumentData } from 'firebase/firestore/lite';
+
+export interface Condition {
+  field: string;
+  operator: '==' | '<' | '<=' | '>' | '>=' | 'array-contains' | 'in' | 'array-contains-any';
+  value: any;
+}
+
+export interface OrderBy {
+  field: string;
+  direction: 'asc' | 'desc';
+}
+
+export interface Input<T> {
+  collection: string;
+  where?: Condition[];
+  orderBy?: OrderBy[];
+  limit?: number;
+  startAt?: number;
+  placeholder: Marko.AttrTag<[]>;
+  then: Marko.AttrTag<[T[]]>;
+  catch: Marko.AttrTag<[Error]>;
+}
+
+<client-only>
+  $ const { collection, where = [], orderBy = [], limit, startAt, placeholder, then, catch: errorHandler } = input;
+  $ const c = fireCollection(db, collection);
+  $ const conditions = [];
+  $ conditions.push(...where.map(({ field, operator, value }) => fireWhere(field, operator, value)));
+  $ conditions.push(...orderBy.map(({ field, direction }) => fireOrderBy(field, direction)));
+  $ if(limit){ conditions.push(fireLimit(limit)) }
+  $ if(startAt){ conditions.push(fireStartAt(startAt)) }
+  $ const q = fireQuery(c, ...conditions);
+
+  <client-await from=getDocs(q)>
+    <@placeholder><${placeholder}/></@placeholder>
+    <@then|documents: QuerySnapshot<DocumentData>|>
+      $ const data = documents.docs.map(document => document.data()) as T[]
+      <${then}(data)/>
+    </@then>
+    <@catch|error: Error|>
+      <${errorHandler}(error)/>
+    </@catch>
+  </client-await>
+</client-only>

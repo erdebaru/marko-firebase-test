@@ -1,0 +1,36 @@
+export interface ItemParams extends Marko.Input<"a"> {}
+
+export interface Input {
+  renderBody?: Marko.Body;
+  item: Marko.RepeatableAttrTag<ItemParams>;
+}
+
+$ const { renderBody } = input;
+$ const items = [...input.item || []]
+
+<div class="nav">
+  <${renderBody}/>
+  <for|item| of=items>
+      <div class="nav-item">
+        <a ...item>
+          <${item.renderBody}/>
+        </a>
+      </div>
+  </for>  
+</div>
+
+style {
+  .nav {
+    grid-area: nav;
+    background-color: #333;
+  }
+  .nav > .nav-item > a{
+    color: #888;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+  }
+  .nav > .nav-item > a:hover{
+    background-color: #444;
+  }
+}
